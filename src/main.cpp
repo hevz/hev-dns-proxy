@@ -157,6 +157,7 @@ int main(int argc, char *argv[])
 
     // Test mode: Lookup hostname
     if (hostname) {
+        setenv("RES_OPTIONS", "debug", 1);
         lookup_hostname(hostname);
         exit(0);
     }
