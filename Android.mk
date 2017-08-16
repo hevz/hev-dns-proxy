@@ -17,7 +17,7 @@ TOP_PATH := $(call my-dir)
 
 LOCAL_PATH = $(TOP_PATH)
 include $(CLEAR_VARS)
-LOCAL_MODULE    := hev-dns-proxy
+LOCAL_MODULE    := hev-dns-proxy-library
 LOCAL_SRC_FILES := \
 	src/DnsProxyListener.cpp \
 	src/FrameworkClient.cpp \
@@ -31,6 +31,29 @@ LOCAL_SRC_FILES := \
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
 LOCAL_CPPFLAGS += -mfpu=neon
 endif
+include $(BUILD_STATIC_LIBRARY)
+
+LOCAL_PATH = $(TOP_PATH)
+include $(CLEAR_VARS)
+LOCAL_MODULE    := hev-dns-proxy-jni
+LOCAL_SRC_FILES := \
+	src/jni.c
+
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+LOCAL_CPPFLAGS += -mfpu=neon
+endif
+LOCAL_STATIC_LIBRARIES := hev-dns-proxy-library
+LOCAL_LDLIBS := -llog
+include $(BUILD_SHARED_LIBRARY)
+
+LOCAL_PATH = $(TOP_PATH)
+include $(CLEAR_VARS)
+LOCAL_MODULE    := hev-dns-proxy
+
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+LOCAL_CPPFLAGS += -mfpu=neon
+endif
+LOCAL_STATIC_LIBRARIES := hev-dns-proxy-library
 LOCAL_LDLIBS := -llog
 include $(BUILD_EXECUTABLE)
 
