@@ -4,6 +4,8 @@ A standalone DNS proxy for Android 4.3+.
 
 **Features**
 * Replace dns proxy of netd.
+* Use user specific dns servers.
+* Apply any iptables rules that were set up to allow/deny access to specific UIDs (apps).
 
 ## How to Build
 
