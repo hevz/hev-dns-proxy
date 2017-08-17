@@ -136,6 +136,14 @@ void setup_dns_proxy(const char *dns1, const char *dns2)
 
 void setup_dns_for_net(unsigned netid, const char *dns1, const char *dns2)
 {
+    if (!dns1 || !strlen(dns1)) {
+        dns1 = DNS_SERVER1;
+    }
+
+    if (!dns2 || !strlen(dns2)) {
+        dns2 = DNS_SERVER2;
+    }
+
     const char *servers[] = { dns1, dns2 };
 
     // clear dns servers
@@ -187,7 +195,7 @@ int main(int argc, char *argv[])
     // back to this service, recursively.
     setenv("ANDROID_DNS_MODE", "local", 1);
 
-    setup_dns(dns1 ? dns1 : DNS_SERVER1, dns2 ? dns2 : DNS_SERVER2);
+    setup_dns(dns1, dns2);
 
     // Test mode: Lookup hostname
     if (hostname) {
