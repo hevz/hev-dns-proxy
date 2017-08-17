@@ -39,8 +39,10 @@
 #include "main.h"
 #include "resolv_netid.h"
 #include "DnsProxyListener.h"
+#include "DnsProxyPolicy.h"
 
 static int event_fd = -1;
+static DnsProxyPolicy *dns_proxy_policy;
 
 static void blockSigpipe()
 {
@@ -190,7 +192,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    DnsProxyListener dpl;
+    DnsProxyListener dpl(dns_proxy_policy);
     if (dpl.startListener()) {
         ALOGE("Unable to start DnsProxyListener (%s)", strerror(errno));
         exit(1);

@@ -21,15 +21,17 @@
 #include "FrameworkListener.h"
 
 #include "NetdCommand.h"
+#include "DnsProxyPolicy.h"
 
 class NetworkController;
 
 class DnsProxyListener : public FrameworkListener {
 public:
-    explicit DnsProxyListener();
+    explicit DnsProxyListener(const DnsProxyPolicy *policy);
     virtual ~DnsProxyListener() {}
 
 private:
+    const DnsProxyPolicy *mPolicy;
     class GetAddrInfoCmd : public NetdCommand {
     public:
         GetAddrInfoCmd(DnsProxyListener* dnsProxyListener);

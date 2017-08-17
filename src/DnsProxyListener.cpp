@@ -39,8 +39,8 @@
 #include "DnsProxyListener.h"
 #include "ResponseCode.h"
 
-DnsProxyListener::DnsProxyListener() :
-        FrameworkListener("dnsproxyd") {
+DnsProxyListener::DnsProxyListener(const DnsProxyPolicy *policy) :
+        FrameworkListener("dnsproxyd"), mPolicy(policy) {
     registerCmd(new GetAddrInfoCmd(this));
     registerCmd(new GetHostByAddrCmd(this));
     registerCmd(new GetHostByNameCmd(this));
@@ -243,6 +243,10 @@ int DnsProxyListener::GetAddrInfoCmd::runCommand(SocketClient *cli,
              netId, uid);
     }
 
+    if (mDnsProxyListener->mPolicy) {
+        netId = mDnsProxyListener->mPolicy->get(uid);
+    }
+
     cli->incRef();
     DnsProxyListener::GetAddrInfoHandler* handler =
             new DnsProxyListener::GetAddrInfoHandler(cli, name, service, hints, netId);
@@ -278,11 +282,16 @@ int DnsProxyListener::GetHostByNameCmd::runCommand(SocketClient *cli,
     unsigned netId = strtoul(argv[1], NULL, 10);
     char* name = argv[2];
     int af = atoi(argv[3]);
+    uid_t uid = cli->getUid();
 
     if (strcmp(name, "^") == 0) {
         name = NULL;
     } else {
         name = strdup(name);
+    }
+
+    if (mDnsProxyListener->mPolicy) {
+        netId = mDnsProxyListener->mPolicy->get(uid);
     }
 
     cli->incRef();
@@ -382,6 +391,7 @@ int DnsProxyListener::GetHostByAddrCmd::runCommand(SocketClient *cli,
     int addrLen = atoi(argv[2]);
     int addrFamily = atoi(argv[3]);
     unsigned netId = strtoul(argv[4], NULL, 10);
+    uid_t uid = cli->getUid();
 
     void* addr = malloc(sizeof(struct in6_addr));
     errno = 0;
@@ -394,6 +404,10 @@ int DnsProxyListener::GetHostByAddrCmd::runCommand(SocketClient *cli,
         free(addr);
         free(msg);
         return -1;
+    }
+
+    if (mDnsProxyListener->mPolicy) {
+        netId = mDnsProxyListener->mPolicy->get(uid);
     }
 
     cli->incRef();
