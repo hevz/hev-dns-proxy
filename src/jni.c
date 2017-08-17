@@ -1,6 +1,6 @@
 /*
  ============================================================================
- Name        : hev-jni.c
+ Name        : jni.c
  Author      : Heiher <r@hev.cc>
  Copyright   : Copyright (c) 2017 everyone.
  Description : JNI
