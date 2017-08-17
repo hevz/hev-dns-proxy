@@ -24,6 +24,8 @@ __BEGIN_DECLS
 int main(int argc, char *argv[]);
 void quit(void);
 
+void setup_proxy_uids(unsigned *uids, unsigned count, unsigned last_uid);
+
 void setup_dns(const char *dns1, const char *dns2);
 void setup_dns_proxy(const char *dns1, const char *dns2);
 void setup_dns_for_net(unsigned netid, const char *dns1, const char *dns2);

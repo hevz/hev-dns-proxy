@@ -107,6 +107,18 @@ void quit(void)
     eventfd_write(event_fd, 1);
 }
 
+void setup_proxy_uids(unsigned *uids, unsigned count, unsigned last_uid)
+{
+    if (!dns_proxy_policy) {
+        dns_proxy_policy = new DnsProxyPolicy(last_uid + 1);
+    }
+
+    dns_proxy_policy->clear();
+    for (unsigned i = 0; i < count; i++) {
+        dns_proxy_policy->set(uids[i], DNS_PROXY_POLICY_PROXY);
+    }
+}
+
 void setup_dns(const char *dns1, const char *dns2)
 {
     setup_dns_for_net(NETID_UNSET, dns1, dns2);
