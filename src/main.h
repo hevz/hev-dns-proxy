@@ -17,17 +17,15 @@
 #ifndef _MAIN_H
 #define _MAIN_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
 
 int main(int argc, char *argv[]);
 void quit(void);
 
 void setup_dns(const char *dns1, const char *dns2);
 
-#ifdef __cplusplus
-}
-#endif
+__END_DECLS
 
 #endif // _MAIN_H
