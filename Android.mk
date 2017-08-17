@@ -20,6 +20,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := hev-dns-proxy-library
 LOCAL_SRC_FILES := \
 	src/DnsProxyListener.cpp \
+	src/DnsProxyPolicy.cpp \
 	src/FrameworkClient.cpp \
 	src/FrameworkCommand.cpp \
 	src/FrameworkListener.cpp \
