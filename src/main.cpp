@@ -112,6 +112,16 @@ void setup_dns(const char *dns1, const char *dns2)
     setup_dns_for_net(NETID_UNSET, dns1, dns2);
 }
 
+void setup_dns_proxy(const char *dns1, const char *dns2)
+{
+    // Set local DNS mode, to prevent bionic from proxying
+    // back to this service, recursively.
+    setenv("ANDROID_DNS_MODE", "local", 1);
+
+    // DNS_PROXY_POLICY_PROXY = 1
+    setup_dns_for_net(1, dns1, dns2);
+}
+
 void setup_dns_for_net(unsigned netid, const char *dns1, const char *dns2)
 {
     const char *servers[] = { dns1, dns2 };
