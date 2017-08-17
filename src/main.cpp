@@ -107,16 +107,21 @@ void quit(void)
 
 void setup_dns(const char *dns1, const char *dns2)
 {
+    setup_dns_for_net(NETID_UNSET, dns1, dns2);
+}
+
+void setup_dns_for_net(unsigned netid, const char *dns1, const char *dns2)
+{
     const char *servers[] = { dns1, dns2 };
 
     // clear dns servers
-    _resolv_set_nameservers_for_net(NETID_UNSET, NULL, 0, "", NULL);
+    _resolv_set_nameservers_for_net(netid, NULL, 0, "", NULL);
 
     // set dns servers
-    _resolv_set_nameservers_for_net(NETID_UNSET, servers, 2, "", NULL);
+    _resolv_set_nameservers_for_net(netid, servers, 2, "", NULL);
 
     // clean dns cache
-    _resolv_flush_cache_for_net(NETID_UNSET);
+    _resolv_flush_cache_for_net(netid);
 }
 
 int main(int argc, char *argv[])
