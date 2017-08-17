@@ -149,6 +149,11 @@ int main(int argc, char *argv[])
         }
     }
 
+    if (android_libc_resolver_init() < 0) {
+        ALOGE("Unable to do libc resolver init(%s)", strerror(errno));
+        exit(1);
+    }
+
     // Set local DNS mode, to prevent bionic from proxying
     // back to this service, recursively.
     setenv("ANDROID_DNS_MODE", "local", 1);

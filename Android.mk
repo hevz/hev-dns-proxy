@@ -26,6 +26,7 @@ LOCAL_SRC_FILES := \
 	src/NetdCommand.cpp \
 	src/SocketClient.cpp \
 	src/SocketListener.cpp \
+	src/libc_resolver.c \
 	src/main.cpp
 
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
