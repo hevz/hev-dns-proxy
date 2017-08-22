@@ -38,6 +38,7 @@
 
 #include "DnsProxyListener.h"
 #include "ResponseCode.h"
+#include "api.h"
 
 DnsProxyListener::DnsProxyListener(const DnsProxyPolicy *policy) :
         FrameworkListener("dnsproxyd"), mPolicy(policy) {
@@ -170,7 +171,15 @@ void DnsProxyListener::GetAddrInfoHandler::run() {
         bool success = !mClient->sendCode(ResponseCode::DnsProxyQueryResult);
         struct addrinfo* ai = result;
         while (ai && success) {
-            success = sendBE32(mClient, 1) && sendaddrinfo(mClient, ai);
+            if (android_getapilevel() <= 22) { // Android 4.3 - 5.1
+                success = sendLenAndData(mClient, sizeof(struct addrinfo), ai)
+                    && sendLenAndData(mClient, ai->ai_addrlen, ai->ai_addr)
+                    && sendLenAndData(mClient,
+                                      ai->ai_canonname ? strlen(ai->ai_canonname) + 1 : 0,
+                                      ai->ai_canonname);
+            } else { // Android 6.0+
+                success = sendBE32(mClient, 1) && sendaddrinfo(mClient, ai);
+            }
             ai = ai->ai_next;
         }
         success = success && sendBE32(mClient, 0);
