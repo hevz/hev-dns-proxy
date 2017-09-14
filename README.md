@@ -14,7 +14,7 @@ A standalone DNS proxy for Android 4.3+.
 mkdir hev-dns-proxy
 cd hev-dns-proxy
 git clone git://github.com/heiher/hev-dns-proxy jni
-nkd-build
+ndk-build
 ```
 
 ## How to Run
