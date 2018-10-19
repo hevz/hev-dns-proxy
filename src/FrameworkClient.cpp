@@ -27,35 +27,39 @@
 
 #include "FrameworkClient.h"
 
-FrameworkClient::FrameworkClient(int socket) {
+FrameworkClient::FrameworkClient (int socket)
+{
     mSocket = socket;
-    pthread_mutex_init(&mWriteMutex, NULL);
+    pthread_mutex_init (&mWriteMutex, NULL);
 }
 
-int FrameworkClient::sendMsg(const char *msg) {
+int
+FrameworkClient::sendMsg (const char *msg)
+{
     int ret;
     if (mSocket < 0) {
         errno = EHOSTUNREACH;
         return -1;
     }
 
-    pthread_mutex_lock(&mWriteMutex);
-    ret = TEMP_FAILURE_RETRY(write(mSocket, msg, strlen(msg) +1));
+    pthread_mutex_lock (&mWriteMutex);
+    ret = TEMP_FAILURE_RETRY (write (mSocket, msg, strlen (msg) + 1));
     if (ret < 0) {
-        SLOGW("Unable to send msg '%s' (%s)", msg, strerror(errno));
+        SLOGW ("Unable to send msg '%s' (%s)", msg, strerror (errno));
     }
-    pthread_mutex_unlock(&mWriteMutex);
+    pthread_mutex_unlock (&mWriteMutex);
     return 0;
 }
 
-int FrameworkClient::sendMsg(const char *msg, const char *data) {
-    size_t bufflen = strlen(msg) + strlen(data) + 1;
-    char *buffer = (char *) alloca(bufflen);
+int
+FrameworkClient::sendMsg (const char *msg, const char *data)
+{
+    size_t bufflen = strlen (msg) + strlen (data) + 1;
+    char *buffer = (char *)alloca (bufflen);
     if (!buffer) {
         errno = -ENOMEM;
         return -1;
     }
-    snprintf(buffer, bufflen, "%s%s", msg, data);
-    return sendMsg(buffer);
+    snprintf (buffer, bufflen, "%s%s", msg, data);
+    return sendMsg (buffer);
 }
-

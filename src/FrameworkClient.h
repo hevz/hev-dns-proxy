@@ -21,16 +21,19 @@
 
 #include <pthread.h>
 
-class FrameworkClient {
-    int             mSocket;
+class FrameworkClient
+{
+    int mSocket;
     pthread_mutex_t mWriteMutex;
 
 public:
-    FrameworkClient(int sock);
-    virtual ~FrameworkClient() {}
+    FrameworkClient (int sock);
+    virtual ~FrameworkClient ()
+    {
+    }
 
-    int sendMsg(const char *msg);
-    int sendMsg(const char *msg, const char *data);
+    int sendMsg (const char *msg);
+    int sendMsg (const char *msg, const char *data);
 };
 
 typedef android::sysutils::List<FrameworkClient *> FrameworkClientCollection;
