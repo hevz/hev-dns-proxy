@@ -29,41 +29,48 @@
 
 #include <android/log.h>
 
-#define SLOG_ENABLE    0
+#define SLOG_ENABLE 0
 
-#define __android_slog_print(...) \
-{ \
-    if (SLOG_ENABLE) { \
-        __android_log_print(__VA_ARGS__); \
-    } \
-}
+#define __android_slog_print(...)              \
+    {                                          \
+        if (SLOG_ENABLE) {                     \
+            __android_log_print (__VA_ARGS__); \
+        }                                      \
+    }
 
 #ifndef ALOGI
-#define ALOGI(...) (__android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__))
+#define ALOGI(...) \
+    (__android_log_print (ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__))
 #endif
 
 #ifndef ALOGW
-#define ALOGW(...) (__android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__))
+#define ALOGW(...) \
+    (__android_log_print (ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__))
 #endif
 
 #ifndef ALOGD
-#define ALOGD(...) (__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
+#define ALOGD(...) \
+    (__android_log_print (ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
 #endif
 
 #ifndef ALOGE
-#define ALOGE(...) (__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__))
+#define ALOGE(...) \
+    (__android_log_print (ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__))
 #endif
 
 #ifndef SLOGV
-#define SLOGV(...) (__android_slog_print(ANDROID_LOG_VERBOSE, LOG_TAG, __VA_ARGS__))
+#define SLOGV(...) \
+    (__android_slog_print (ANDROID_LOG_VERBOSE, LOG_TAG, __VA_ARGS__))
 #endif
 
 #ifndef SLOGW
-#define SLOGW(...) (__android_slog_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__))
+#define SLOGW(...) \
+    (__android_slog_print (ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__))
 #endif
 
 #ifndef SLOGE
-#define SLOGE(...) (__android_slog_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__))
+#define SLOGE(...) \
+    (__android_slog_print (ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__))
 #endif
 
 #endif // _LOG_H
