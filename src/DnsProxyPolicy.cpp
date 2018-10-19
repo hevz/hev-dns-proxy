@@ -14,24 +14,32 @@
 
 #include "DnsProxyPolicy.h"
 
-DnsProxyPolicy::DnsProxyPolicy(unsigned length) {
+DnsProxyPolicy::DnsProxyPolicy (unsigned length)
+{
     mLength = length;
     mBuffer = new unsigned char[length];
-    clear();
+    clear ();
 }
 
-DnsProxyPolicy::~DnsProxyPolicy() {
+DnsProxyPolicy::~DnsProxyPolicy ()
+{
     delete mBuffer;
 }
 
-unsigned char DnsProxyPolicy::get(unsigned id) const {
+unsigned char
+DnsProxyPolicy::get (unsigned id) const
+{
     return mBuffer[id];
 }
 
-void DnsProxyPolicy::set(unsigned id, unsigned char policy) {
+void
+DnsProxyPolicy::set (unsigned id, unsigned char policy)
+{
     mBuffer[id] = policy;
 }
 
-void DnsProxyPolicy::clear() {
-    memset(mBuffer, DNS_PROXY_POLICY_NONE, mLength);
+void
+DnsProxyPolicy::clear ()
+{
+    memset (mBuffer, DNS_PROXY_POLICY_NONE, mLength);
 }

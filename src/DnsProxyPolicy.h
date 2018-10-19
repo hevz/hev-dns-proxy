@@ -16,20 +16,20 @@ enum
     DNS_PROXY_POLICY_PROXY = 1,
 };
 
-class DnsProxyPolicy {
+class DnsProxyPolicy
+{
 private:
     unsigned mLength;
     unsigned char *mBuffer;
 
 public:
+    DnsProxyPolicy (unsigned length);
+    ~DnsProxyPolicy ();
 
-    DnsProxyPolicy(unsigned length);
-    ~DnsProxyPolicy();
+    unsigned char get (unsigned id) const;
+    void set (unsigned id, unsigned char policy);
 
-    unsigned char get(unsigned id) const;
-    void set(unsigned id, unsigned char policy);
-
-    void clear();
+    void clear ();
 };
 
 #endif
