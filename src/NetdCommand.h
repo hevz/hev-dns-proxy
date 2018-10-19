@@ -19,10 +19,13 @@
 
 #include "FrameworkCommand.h"
 
-class NetdCommand : public FrameworkCommand {
+class NetdCommand : public FrameworkCommand
+{
 public:
-    NetdCommand(const char *cmd);
-    virtual ~NetdCommand() {}
+    NetdCommand (const char *cmd);
+    virtual ~NetdCommand ()
+    {
+    }
 };
 
 #endif

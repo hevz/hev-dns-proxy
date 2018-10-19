@@ -16,6 +16,6 @@
 
 #include "NetdCommand.h"
 
-NetdCommand::NetdCommand(const char *cmd) :
-              FrameworkCommand(cmd)  {
+NetdCommand::NetdCommand (const char *cmd) : FrameworkCommand (cmd)
+{
 }
