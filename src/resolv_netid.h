@@ -53,29 +53,34 @@ __BEGIN_DECLS
 struct __res_params;
 struct addrinfo;
 
-int android_libc_resolver_init(void);
+int android_libc_resolver_init (void);
 
-struct hostent * android_gethostbyaddrfornet(const void *addr, socklen_t len, int af,
-        unsigned netid, unsigned mark);
+struct hostent *android_gethostbyaddrfornet (const void *addr, socklen_t len,
+                                             int af, unsigned netid,
+                                             unsigned mark);
 
-struct hostent * android_gethostbynamefornet(const char *name, int af, unsigned netid, unsigned mark);
+struct hostent *android_gethostbynamefornet (const char *name, int af,
+                                             unsigned netid, unsigned mark);
 
-int android_getaddrinfofornet(const char *hostname, const char *servname,
-        const struct addrinfo *hints, unsigned netid, unsigned mark,
-        struct addrinfo **res);
+int android_getaddrinfofornet (const char *hostname, const char *servname,
+                               const struct addrinfo *hints, unsigned netid,
+                               unsigned mark, struct addrinfo **res);
 
 /* set name servers for a network */
-extern int _resolv_set_nameservers_for_net(unsigned netid, const char** servers,
-        unsigned numservers, const char *domains, const struct __res_params* params);
+extern int _resolv_set_nameservers_for_net (unsigned netid,
+                                            const char **servers,
+                                            unsigned numservers,
+                                            const char *domains,
+                                            const struct __res_params *params);
 
 /* flush the cache associated with a certain network */
-extern void _resolv_flush_cache_for_net(unsigned netid);
+extern void _resolv_flush_cache_for_net (unsigned netid);
 
 /* delete the cache associated with a certain network */
-extern void _resolv_delete_cache_for_net(unsigned netid);
+extern void _resolv_delete_cache_for_net (unsigned netid);
 
 /* delete the cache associated with a certain network */
-extern void _resolv_delete_cache_for_net(unsigned netid);
+extern void _resolv_delete_cache_for_net (unsigned netid);
 
 __END_DECLS
 
