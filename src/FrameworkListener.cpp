@@ -27,44 +27,50 @@
 
 static const int CMD_BUF_SIZE = 1024;
 
-#define UNUSED __attribute__((unused))
+#define UNUSED __attribute__ ((unused))
 
-FrameworkListener::FrameworkListener(const char *socketName, bool withSeq) :
-                            SocketListener(socketName, true, withSeq) {
-    init(socketName, withSeq);
+FrameworkListener::FrameworkListener (const char *socketName, bool withSeq)
+    : SocketListener (socketName, true, withSeq)
+{
+    init (socketName, withSeq);
 }
 
-FrameworkListener::FrameworkListener(const char *socketName) :
-                            SocketListener(socketName, true, false) {
-    init(socketName, false);
+FrameworkListener::FrameworkListener (const char *socketName)
+    : SocketListener (socketName, true, false)
+{
+    init (socketName, false);
 }
 
-FrameworkListener::FrameworkListener(int sock) :
-                            SocketListener(sock, true) {
-    init(NULL, false);
+FrameworkListener::FrameworkListener (int sock) : SocketListener (sock, true)
+{
+    init (NULL, false);
 }
 
-void FrameworkListener::init(const char *socketName UNUSED, bool withSeq) {
-    mCommands = new FrameworkCommandCollection();
+void
+FrameworkListener::init (const char *socketName UNUSED, bool withSeq)
+{
+    mCommands = new FrameworkCommandCollection ();
     errorRate = 0;
     mCommandCount = 0;
     mWithSeq = withSeq;
     mSkipToNextNullByte = false;
 }
 
-bool FrameworkListener::onDataAvailable(SocketClient *c) {
+bool
+FrameworkListener::onDataAvailable (SocketClient *c)
+{
     char buffer[CMD_BUF_SIZE];
     int len;
 
-    len = TEMP_FAILURE_RETRY(read(c->getSocket(), buffer, sizeof(buffer)));
+    len = TEMP_FAILURE_RETRY (read (c->getSocket (), buffer, sizeof (buffer)));
     if (len < 0) {
-        SLOGE("read() failed (%s)", strerror(errno));
+        SLOGE ("read() failed (%s)", strerror (errno));
         return false;
     } else if (!len) {
         return false;
-    } else if (buffer[len-1] != '\0') {
-        SLOGW("String is not zero-terminated");
-        c->sendMsg(500, "Command too large for buffer", false);
+    } else if (buffer[len - 1] != '\0') {
+        SLOGW ("String is not zero-terminated");
+        c->sendMsg (500, "Command too large for buffer", false);
         mSkipToNextNullByte = true;
         return false;
     }
@@ -78,7 +84,7 @@ bool FrameworkListener::onDataAvailable(SocketClient *c) {
             if (mSkipToNextNullByte) {
                 mSkipToNextNullByte = false;
             } else {
-                dispatchCommand(c, buffer + offset);
+                dispatchCommand (c, buffer + offset);
             }
             offset = i + 1;
         }
@@ -88,25 +94,29 @@ bool FrameworkListener::onDataAvailable(SocketClient *c) {
     return true;
 }
 
-void FrameworkListener::registerCmd(FrameworkCommand *cmd) {
-    mCommands->push_back(cmd);
+void
+FrameworkListener::registerCmd (FrameworkCommand *cmd)
+{
+    mCommands->push_back (cmd);
 }
 
-void FrameworkListener::dispatchCommand(SocketClient *cli, char *data) {
+void
+FrameworkListener::dispatchCommand (SocketClient *cli, char *data)
+{
     FrameworkCommandCollection::iterator i;
     int argc = 0;
     char *argv[FrameworkListener::CMD_ARGS_MAX];
     char tmp[CMD_BUF_SIZE];
     char *p = data;
     char *q = tmp;
-    char *qlimit = tmp + sizeof(tmp) - 1;
+    char *qlimit = tmp + sizeof (tmp) - 1;
     bool esc = false;
     bool quote = false;
     bool haveCmdNum = !mWithSeq;
 
-    memset(argv, 0, sizeof(argv));
-    memset(tmp, 0, sizeof(tmp));
-    while(*p) {
+    memset (argv, 0, sizeof (argv));
+    memset (tmp, 0, sizeof (tmp));
+    while (*p) {
         if (*p == '\\') {
             if (esc) {
                 if (q >= qlimit)
@@ -127,7 +137,7 @@ void FrameworkListener::dispatchCommand(SocketClient *cli, char *data) {
                     goto overflow;
                 *q++ = '\\';
             } else {
-                cli->sendMsg(500, "Unsupported escape sequence", false);
+                cli->sendMsg (500, "Unsupported escape sequence", false);
                 goto out;
             }
             p++;
@@ -151,19 +161,19 @@ void FrameworkListener::dispatchCommand(SocketClient *cli, char *data) {
             *q = '\0';
             if (!haveCmdNum) {
                 char *endptr;
-                int cmdNum = (int)strtol(tmp, &endptr, 0);
+                int cmdNum = (int)strtol (tmp, &endptr, 0);
                 if (endptr == NULL || *endptr != '\0') {
-                    cli->sendMsg(500, "Invalid sequence number", false);
+                    cli->sendMsg (500, "Invalid sequence number", false);
                     goto out;
                 }
-                cli->setCmdNum(cmdNum);
+                cli->setCmdNum (cmdNum);
                 haveCmdNum = true;
             } else {
                 if (argc >= CMD_ARGS_MAX)
                     goto overflow;
-                argv[argc++] = strdup(tmp);
+                argv[argc++] = strdup (tmp);
             }
-            memset(tmp, 0, sizeof(tmp));
+            memset (tmp, 0, sizeof (tmp));
             q = tmp;
             continue;
         }
@@ -173,7 +183,7 @@ void FrameworkListener::dispatchCommand(SocketClient *cli, char *data) {
     *q = '\0';
     if (argc >= CMD_ARGS_MAX)
         goto overflow;
-    argv[argc++] = strdup(tmp);
+    argv[argc++] = strdup (tmp);
 #if 0
     for (int k = 0; k < argc; k++) {
         SLOGD("arg[%d] = '%s'", k, argv[k]);
@@ -181,34 +191,35 @@ void FrameworkListener::dispatchCommand(SocketClient *cli, char *data) {
 #endif
 
     if (quote) {
-        cli->sendMsg(500, "Unclosed quotes error", false);
+        cli->sendMsg (500, "Unclosed quotes error", false);
         goto out;
     }
 
     if (errorRate && (++mCommandCount % errorRate == 0)) {
         /* ignore this command - let the timeout handler handle it */
-        SLOGE("Faking a timeout");
+        SLOGE ("Faking a timeout");
         goto out;
     }
 
-    for (i = mCommands->begin(); i != mCommands->end(); ++i) {
+    for (i = mCommands->begin (); i != mCommands->end (); ++i) {
         FrameworkCommand *c = *i;
 
-        if (!strcmp(argv[0], c->getCommand())) {
-            if (c->runCommand(cli, argc, argv)) {
-                SLOGW("Handler '%s' error (%s)", c->getCommand(), strerror(errno));
+        if (!strcmp (argv[0], c->getCommand ())) {
+            if (c->runCommand (cli, argc, argv)) {
+                SLOGW ("Handler '%s' error (%s)", c->getCommand (),
+                       strerror (errno));
             }
             goto out;
         }
     }
-    cli->sendMsg(500, "Command not recognized", false);
+    cli->sendMsg (500, "Command not recognized", false);
 out:
     int j;
     for (j = 0; j < argc; j++)
-        free(argv[j]);
+        free (argv[j]);
     return;
 
 overflow:
-    cli->sendMsg(500, "Command too long", false);
+    cli->sendMsg (500, "Command too long", false);
     goto out;
 }
