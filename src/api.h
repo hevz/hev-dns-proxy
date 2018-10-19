@@ -21,7 +21,7 @@
 
 __BEGIN_DECLS
 
-int android_getapilevel(void);
+int android_getapilevel (void);
 
 __END_DECLS
 

@@ -24,22 +24,22 @@
 
 static int api_level;
 
-int android_getapilevel(void)
+int
+android_getapilevel (void)
 {
     if (!api_level) {
         char buf[16];
         long int val;
 
-        __system_property_get("ro.build.version.sdk", buf);
-        val = strtol(buf, NULL, 10);
-        if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN))
-            || (errno != 0 && val == 0)) {
+        __system_property_get ("ro.build.version.sdk", buf);
+        val = strtol (buf, NULL, 10);
+        if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN)) ||
+            (errno != 0 && val == 0)) {
             api_level = __ANDROID_API__;
         } else {
-            api_level = (int) val;
+            api_level = (int)val;
         }
     }
 
     return api_level;
 }
-
