@@ -18,10 +18,13 @@
 
 #include "SocketClient.h"
 
-class SocketClientCommand {
+class SocketClientCommand
+{
 public:
-    virtual ~SocketClientCommand() { }
-    virtual void runSocketCommand(SocketClient *client) = 0;
+    virtual ~SocketClientCommand ()
+    {
+    }
+    virtual void runSocketCommand (SocketClient *client) = 0;
 };
 
 #endif
