@@ -20,14 +20,21 @@ ndk-build
 ## How to Run
 
 ```bash
+# Switch to root user
 adb root
+# Push executable to device
 adb push hev-dns-proxy /data/hev-dns-proxy
 adb shell
+# Run new dns proxy in background
 /data/hev-dns-proxy -p /dev/socket/hev-dns-proxy -a 8.8.8.8 -b 8.8.4.4 &
 cd /dev/socket
+# Change ownership and SELinux context for socket file of new dns proxy
 chown root:inet hev-dns-proxy
 chcon u:object_r:dnsproxyd_socket:s0 hev-dns-proxy
-mv dnsproxyd hev-dns-proxy; mv dnsproxyd.netd dnsproxyd
+# Backup socket file of netd
+mv dnsproxyd dnsproxyd.netd
+# Enable new dns proxy
+mv hev-dns-proxy dnsproxyd
 ```
 
 ## Authors
