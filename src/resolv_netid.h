@@ -55,16 +55,16 @@ struct addrinfo;
 
 int android_libc_resolver_init (void);
 
-struct hostent *android_gethostbyaddrfornet (const void *addr, socklen_t len,
-                                             int af, unsigned netid,
-                                             unsigned mark);
+struct hostent *_android_gethostbyaddrfornet (const void *addr, socklen_t len,
+                                              int af, unsigned netid,
+                                              unsigned mark);
 
-struct hostent *android_gethostbynamefornet (const char *name, int af,
-                                             unsigned netid, unsigned mark);
+struct hostent *_android_gethostbynamefornet (const char *name, int af,
+                                              unsigned netid, unsigned mark);
 
-int android_getaddrinfofornet (const char *hostname, const char *servname,
-                               const struct addrinfo *hints, unsigned netid,
-                               unsigned mark, struct addrinfo **res);
+int _android_getaddrinfofornet (const char *hostname, const char *servname,
+                                const struct addrinfo *hints, unsigned netid,
+                                unsigned mark, struct addrinfo **res);
 
 /* set name servers for a network */
 extern int _resolv_set_nameservers_for_net (unsigned netid,

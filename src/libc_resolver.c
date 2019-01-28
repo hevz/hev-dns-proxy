@@ -52,8 +52,8 @@ android_libc_resolver_init (void)
 }
 
 struct hostent *
-android_gethostbyaddrfornet (const void *addr, socklen_t len, int af,
-                             unsigned netid, unsigned mark)
+_android_gethostbyaddrfornet (const void *addr, socklen_t len, int af,
+                              unsigned netid, unsigned mark)
 {
     if (!_gethostbyaddrfornet) {
         ALOGE ("Please run android_libc_resolver_init first!");
@@ -64,8 +64,8 @@ android_gethostbyaddrfornet (const void *addr, socklen_t len, int af,
 }
 
 struct hostent *
-android_gethostbynamefornet (const char *name, int af, unsigned netid,
-                             unsigned mark)
+_android_gethostbynamefornet (const char *name, int af, unsigned netid,
+                              unsigned mark)
 {
     if (!_gethostbynamefornet) {
         ALOGE ("Please run android_libc_resolver_init first!");
@@ -76,9 +76,9 @@ android_gethostbynamefornet (const char *name, int af, unsigned netid,
 }
 
 int
-android_getaddrinfofornet (const char *hostname, const char *servname,
-                           const struct addrinfo *hints, unsigned netid,
-                           unsigned mark, struct addrinfo **res)
+_android_getaddrinfofornet (const char *hostname, const char *servname,
+                            const struct addrinfo *hints, unsigned netid,
+                            unsigned mark, struct addrinfo **res)
 {
     if (!_getaddrinfofornet) {
         ALOGE ("Please run android_libc_resolver_init first!");
