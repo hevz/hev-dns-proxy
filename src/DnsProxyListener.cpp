@@ -174,7 +174,9 @@ DnsProxyListener::GetAddrInfoHandler::run ()
     }
 
     // Set filesytem UID of client.
-    syscall (__NR_setfsuid, mClient->getUid ());
+    if (geteuid () == 0) {
+        syscall (__NR_setfsuid, mClient->getUid ());
+    }
 
     struct addrinfo *result = NULL;
     uint32_t rv = android_getaddrinfofornet (mHost, mService, mHints, mNetId,
@@ -377,7 +379,9 @@ DnsProxyListener::GetHostByNameHandler::run ()
     }
 
     // Set filesytem UID of client.
-    syscall (__NR_setfsuid, mClient->getUid ());
+    if (geteuid () == 0) {
+        syscall (__NR_setfsuid, mClient->getUid ());
+    }
 
     struct hostent *hp =
         android_gethostbynamefornet (mName, mAf, mNetId, mMark);
@@ -509,7 +513,9 @@ DnsProxyListener::GetHostByAddrHandler::run ()
     struct hostent *hp;
 
     // Set filesytem UID of client.
-    syscall (__NR_setfsuid, mClient->getUid ());
+    if (geteuid () == 0) {
+        syscall (__NR_setfsuid, mClient->getUid ());
+    }
 
     // NOTE gethostbyaddr should take a void* but bionic thinks it should be char*
     hp = android_gethostbyaddrfornet ((char *)mAddress, mAddressLen,
