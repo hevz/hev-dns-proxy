@@ -179,8 +179,8 @@ DnsProxyListener::GetAddrInfoHandler::run ()
     }
 
     struct addrinfo *result = NULL;
-    uint32_t rv = android_getaddrinfofornet (mHost, mService, mHints, mNetId,
-                                             MARK_UNSET, &result);
+    uint32_t rv = _android_getaddrinfofornet (mHost, mService, mHints, mNetId,
+                                              MARK_UNSET, &result);
 
     if (rv) {
         // getaddrinfo failed
@@ -384,7 +384,7 @@ DnsProxyListener::GetHostByNameHandler::run ()
     }
 
     struct hostent *hp =
-        android_gethostbynamefornet (mName, mAf, mNetId, mMark);
+        _android_gethostbynamefornet (mName, mAf, mNetId, mMark);
 
     if (DBG) {
         ALOGD (
@@ -518,8 +518,8 @@ DnsProxyListener::GetHostByAddrHandler::run ()
     }
 
     // NOTE gethostbyaddr should take a void* but bionic thinks it should be char*
-    hp = android_gethostbyaddrfornet ((char *)mAddress, mAddressLen,
-                                      mAddressFamily, mNetId, mMark);
+    hp = _android_gethostbyaddrfornet ((char *)mAddress, mAddressLen,
+                                       mAddressFamily, mNetId, mMark);
 
     if (DBG) {
         ALOGD (
