@@ -110,8 +110,7 @@ native_start_service (JNIEnv *env, jobject thiz, jstring socket_path)
     argv = malloc (sizeof (char *) * 7);
 
     argv[1] = strdup ("-p");
-    bytes =
-        (const signed char *)(*env)->GetStringUTFChars (env, socket_path, NULL);
+    bytes = (const jbyte *)(*env)->GetStringUTFChars (env, socket_path, NULL);
     argv[2] = strdup ((const char *)bytes);
     (*env)->ReleaseStringUTFChars (env, socket_path, (const char *)bytes);
 
@@ -155,8 +154,8 @@ native_set_resolver_proxy (JNIEnv *env, jobject thiz, jstring dns1,
 {
     const jbyte *bytes1, *bytes2;
 
-    bytes1 = (const signed char *)(*env)->GetStringUTFChars (env, dns1, NULL);
-    bytes2 = (const signed char *)(*env)->GetStringUTFChars (env, dns2, NULL);
+    bytes1 = (const jbyte *)(*env)->GetStringUTFChars (env, dns1, NULL);
+    bytes2 = (const jbyte *)(*env)->GetStringUTFChars (env, dns2, NULL);
 
     setup_dns_proxy ((const char *)bytes1, (const char *)bytes2);
 
