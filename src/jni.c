@@ -94,7 +94,6 @@ thread_handler (void *data)
     free (argv[5]);
     free (argv[6]);
     free (argv);
-    work_thread = 0;
 
     return NULL;
 }
@@ -134,6 +133,7 @@ native_stop_service (JNIEnv *env, jobject thiz)
 
     quit ();
     pthread_join (work_thread, NULL);
+    work_thread = 0;
 }
 
 static void
